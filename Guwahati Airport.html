@@ -128,176 +128,146 @@
         </div>
         <!-- About End -->
 
-        <!-- Fire directory Start-->
-        <div class="container mt-5">
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="documentTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    Select Document Type
-                </button>
-                <ul class="dropdown-menu" id="document-type-list"></ul>
-            </div>
-    
-            <div class="dropdown mt-3" id="subfolder-dropdown" style="display: none;">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="subfolderDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    Select Description
-                </button>
-                <ul class="dropdown-menu" id="subfolder-list"></ul>
-            </div>
-    
-         <!-- 
-            <div class="dropdown mt-3" id="subfolder-dropdown" style="display: none;">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="subfolderDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    Select Subfolder
-                </button>
-                <ul class="dropdown-menu" id="subfolder-list"></ul>
-            </div>
-         -->
-            <div class="mt-3" id="file-container" style="display: none;">
-                <h5 class="bg-primary text-white p-2 rounded" style="background-color: #007bff; color: white; padding-left: 10px; padding-right: 10px; display: inline-block; line-height: 0.7;">Files:</h5>
-                <table class="table table-bordered" style="max-width: 600px; margin: 0 auto; border-radius: 50px;">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th class="text-white bg-primary font-weight-bold text-center" style="width: 20%;">File Name</th>
-                            <th class="text-white bg-primary font-weight-bold text-center" style="width: 5%;">View</th>
-                        </tr>
-                    </thead>
-                    <tbody id="file-list">
-                        <!-- File rows will be added here dynamically -->
-                    </tbody>
-                </table>
-            </div>
+        <!-- Fire directory Start -->
+<!-- Fire directory Start -->
+<div class="container mt-5">
+    <div class="row align-items-end" style="background-color: #8ff082d6; padding: 15px; border-radius: 5px;">
+        <!-- Folder Selection -->
+        <div class="col-md-4">
+            <label for="folderDropdown" class="form-label">Document Type</label>
+            <select id="folderDropdown" class="form-select">
+                <option value="">Choose Document Type</option>
+            </select>
         </div>
-        
-        <!-- Script for Fetching files from Google sheet -->
-        <script>
-            const SHEET_ID = '1k3qErbL9zMU0WS3zGCLgEDn-lG5B7lwt8g6GOcwZmHY'; // Replace with your Google Sheet ID
-            const SHEET_NAME = 'Sheet1'; // Replace with your sheet name
-            const API_KEY = 'AIzaSyC6J441PKh0FU4t1YnGlVyOTrNs8R0DUtk'; // Replace with your Google API Key
-    
-            const SHEET_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
-    
-            document.addEventListener("DOMContentLoaded", async () => {
-                try {
-                    const response = await fetch(SHEET_URL);
-                    const data = await response.json();
-    
-                    if (data.values) {
-                        const sheetData = processSheetData(data.values); // Organize data hierarchically
-                        setupDropdownBehavior(sheetData);
-                    } else {
-                        console.error("No data found in the sheet.");
-                    }
-                } catch (error) {
-                    console.error("Error fetching or processing sheet data:", error);
-                }
-            });
-    
-            function processSheetData(data) {
-                const structuredData = {};
-                data.slice(1).forEach(([documentType, description, fileName, fileLink]) => {
-                    if (!structuredData[documentType]) structuredData[documentType] = [];
-                    structuredData[documentType].push({ description, fileName, fileLink });
-                });
-                return structuredData;
+
+        <!-- Subfolder Selection -->
+        <div class="col-md-4">
+            <label for="subfolderDropdown" class="form-label">Description</label>
+            <select id="subfolderDropdown" class="form-select" disabled>
+                <option value="">Choose Description</option>
+            </select>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="col-md-4">
+            <button id="submitButton" class="btn btn-primary mt-4" disabled>Submit</button>
+        </div>
+    </div>
+
+    <!-- File Display Table -->
+   
+    <div class="mt-5" id="fileContainer" style="display: none;">
+        <h5>Files:</h5>
+        <table class="table table-bordered" style="max-width: 800px; margin: 0 auto; border-radius: 50px;">
+            <thead>
+                <tr>
+                    <th class="text-white bg-primary font-weight-bold text-center" style="width: 15%;">File Name</th>
+                     <th class="text-white bg-primary font-weight-bold text-center" style="width: 3%;">View</th>
+                </tr>
+            </thead>
+            <tbody id="fileList">
+                <!-- Dynamic rows will be added here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const SHEET_ID = '1k3qErbL9zMU0WS3zGCLgEDn-lG5B7lwt8g6GOcwZmHY'; // Replace with your Google Sheet ID
+    const SHEET_NAME = 'Sheet1'; // Replace with your sheet name
+    const API_KEY = 'AIzaSyC6J441PKh0FU4t1YnGlVyOTrNs8R0DUtk'; // Replace with your Google API Key
+
+    const SHEET_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        try {
+            const response = await fetch(SHEET_URL);
+            const data = await response.json();
+
+            if (data.values) {
+                const sheetData = processSheetData(data.values); // Organize data hierarchically
+                setupDropdownBehavior(sheetData);
+            } else {
+                console.error("No data found in the sheet.");
             }
-    
-            function setupDropdownBehavior(data) {
-                const documentTypeDropdown = document.getElementById("documentTypeDropdown");
-                const documentTypeList = document.getElementById("document-type-list");
-    
-                // Populate the document type dropdown
-                Object.keys(data).forEach(documentType => {
-                    const documentTypeItem = document.createElement("li");
-                    documentTypeItem.textContent = documentType;
-                    documentTypeItem.classList.add("dropdown-item");
-                    documentTypeItem.onclick = () => {
-                        documentTypeDropdown.textContent = documentType;
-                        showSubfolders(data[documentType]);
-                    };
-                    documentTypeList.appendChild(documentTypeItem);
-                });
-    
-                // Reset functionality when clicking on document type dropdown again
-                documentTypeDropdown.onclick = () => {
-                    if (document.getElementById("subfolder-dropdown").style.display === "block") {
-                        resetSelections();
-                        documentTypeDropdown.textContent = "Select Document Type"; // Reset the label
-                    }
-                };
-            }
-    
-            function showSubfolders(subfolders) {
-    const subfolderDropdown = document.getElementById("subfolder-dropdown");
-    const subfolderList = document.getElementById("subfolder-list");
-    const subfolderDropdownBtn = document.getElementById("subfolderDropdown");
-
-    resetSelections("subfolder");
-
-    subfolderDropdown.style.display = "block";
-    subfolderList.innerHTML = "";
-
-    const uniqueDescriptions = new Set();
-
-    subfolders.forEach(({ description, fileName, fileLink }) => {
-        if (!uniqueDescriptions.has(description)) {
-            uniqueDescriptions.add(description);
-
-            const subfolderItem = document.createElement("li");
-            subfolderItem.textContent = description;
-            subfolderItem.classList.add("dropdown-item");
-
-            subfolderItem.onclick = () => {
-                subfolderDropdownBtn.textContent = description;
-
-                // Collect all rows matching the current description
-                const matchingFiles = subfolders.filter(
-                    (item) => item.description === description
-                );
-                showFiles(matchingFiles);
-            };
-
-            subfolderList.appendChild(subfolderItem);
+        } catch (error) {
+            console.error("Error fetching or processing sheet data:", error);
         }
     });
-}
 
-            function showFiles(files) {
-                const fileContainer = document.getElementById("file-container");
-                const fileList = document.getElementById("file-list");
-    
-                fileContainer.style.display = "block";
-                fileList.innerHTML = "";
-    
-                files.forEach(({ fileName, fileLink }) => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${fileName}</td>
-                        <td style="text-align: center;">
-                            <a href="${fileLink}" target="_blank"><i class="fa fa-eye"></i></a>
-                        </td>
-                    `;
-                    fileList.appendChild(row);
+    function processSheetData(data) {
+        const structuredData = {};
+        data.slice(1).forEach(([documentType, description, fileName, fileLink]) => {
+            if (!structuredData[documentType]) structuredData[documentType] = {};
+            if (!structuredData[documentType][description]) structuredData[documentType][description] = [];
+            structuredData[documentType][description].push({ fileName, fileLink });
+        });
+        return structuredData;
+    }
+
+    function setupDropdownBehavior(data) {
+        const folderDropdown = document.getElementById("folderDropdown");
+        const subfolderDropdown = document.getElementById("subfolderDropdown");
+        const submitButton = document.getElementById("submitButton");
+        const fileContainer = document.getElementById("fileContainer");
+        const fileList = document.getElementById("fileList");
+
+        // Populate folder dropdown
+        Object.keys(data).forEach(folder => {
+            const option = document.createElement("option");
+            option.value = folder;
+            option.textContent = folder;
+            folderDropdown.appendChild(option);
+        });
+
+        // Handle folder selection
+        folderDropdown.addEventListener("change", () => {
+            const selectedFolder = folderDropdown.value;
+            subfolderDropdown.innerHTML = '<option value="">Choose Subfolder</option>';
+            subfolderDropdown.disabled = !selectedFolder;
+            submitButton.disabled = true;
+            fileContainer.style.display = "none";
+
+            if (selectedFolder) {
+                Object.keys(data[selectedFolder]).forEach(subfolder => {
+                    const option = document.createElement("option");
+                    option.value = subfolder;
+                    option.textContent = subfolder;
+                    subfolderDropdown.appendChild(option);
                 });
             }
-    
-            function resetSelections(level = "documentType") {
-                const subfolderDropdown = document.getElementById("subfolder-dropdown");
-                const fileContainer = document.getElementById("file-container");
-    
-                // Reset subfolder level and below
-                if (level === "documentType" || level === "subfolder") {
-                    subfolderDropdown.style.display = "none";
-                    document.getElementById("subfolderDropdown").textContent = "Select Description";
-                    document.getElementById("subfolder-list").innerHTML = "";
-                }
-    
-                // Reset files
-                if (level === "documentType") {
-                    fileContainer.style.display = "none";
-                    document.getElementById("file-list").innerHTML = "";
-                }
-            }
-        </script>
+        });
+
+        // Handle subfolder selection
+        subfolderDropdown.addEventListener("change", () => {
+            submitButton.disabled = !subfolderDropdown.value;
+        });
+
+        // Handle submit button click
+        submitButton.addEventListener("click", () => {
+            const selectedFolder = folderDropdown.value;
+            const selectedSubfolder = subfolderDropdown.value;
+
+            fileList.innerHTML = "";
+            data[selectedFolder][selectedSubfolder].forEach(file => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${file.fileName}</td>
+                    <td style="text-align: center;"><a href="${file.fileLink}" target="_blank"><i class="fa fa-eye"></i></a></td>
+                `;
+                fileList.appendChild(row);
+            });
+
+            fileContainer.style.display = "block";
+             // Scroll to the fileContainer smoothly
+    fileContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+     });
+       
+    }
+</script>
+
+
+
         
         
         <!-- JavaScript Libraries -->

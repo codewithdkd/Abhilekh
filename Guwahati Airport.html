@@ -227,27 +227,40 @@
             }
     
             function showSubfolders(subfolders) {
-                const subfolderDropdown = document.getElementById("subfolder-dropdown");
-                const subfolderList = document.getElementById("subfolder-list");
-                const subfolderDropdownBtn = document.getElementById("subfolderDropdown");
-    
-                resetSelections("subfolder");
-    
-                subfolderDropdown.style.display = "block";
-                subfolderList.innerHTML = "";
-    
-                subfolders.forEach(({ description, fileName, fileLink }) => {
-                    const subfolderItem = document.createElement("li");
-                    subfolderItem.textContent = description;
-                    subfolderItem.classList.add("dropdown-item");
-                    subfolderItem.onclick = () => {
-                        subfolderDropdownBtn.textContent = description;
-                        showFiles([{ description, fileName, fileLink }]);
-                    };
-                    subfolderList.appendChild(subfolderItem);
-                });
-            }
-    
+    const subfolderDropdown = document.getElementById("subfolder-dropdown");
+    const subfolderList = document.getElementById("subfolder-list");
+    const subfolderDropdownBtn = document.getElementById("subfolderDropdown");
+
+    resetSelections("subfolder");
+
+    subfolderDropdown.style.display = "block";
+    subfolderList.innerHTML = "";
+
+    const uniqueDescriptions = new Set();
+
+    subfolders.forEach(({ description, fileName, fileLink }) => {
+        if (!uniqueDescriptions.has(description)) {
+            uniqueDescriptions.add(description);
+
+            const subfolderItem = document.createElement("li");
+            subfolderItem.textContent = description;
+            subfolderItem.classList.add("dropdown-item");
+
+            subfolderItem.onclick = () => {
+                subfolderDropdownBtn.textContent = description;
+
+                // Collect all rows matching the current description
+                const matchingFiles = subfolders.filter(
+                    (item) => item.description === description
+                );
+                showFiles(matchingFiles);
+            };
+
+            subfolderList.appendChild(subfolderItem);
+        }
+    });
+}
+
             function showFiles(files) {
                 const fileContainer = document.getElementById("file-container");
                 const fileList = document.getElementById("file-list");

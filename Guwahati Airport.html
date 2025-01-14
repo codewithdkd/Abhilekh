@@ -131,7 +131,7 @@
         <!-- Fire directory Start -->
 <!-- Fire directory Start -->
 <div class="container mt-5">
-    <div class="row align-items-end" style="background-color: #70bdec; padding: 15px; border-radius: 5px;">
+    <div class="row align-items-end" style="background-color: #faf87b; padding: 15px; border-radius: 5px;">
         <!-- Folder Selection -->
         <div class="col-md-4">
             <label for="folderDropdown" class="form-label">Document Type</label>
@@ -150,7 +150,7 @@
 
         <!-- Submit Button -->
         <div class="col-md-4">
-            <button id="submitButton" class="btn btn-primary mt-4" disabled>Submit</button>
+            <button id="submitButton" class="btn btn-primary mt-4" style="color: rgb(255, 255, 255);">Submit</button>
         </div>
     </div>
 
@@ -162,7 +162,7 @@
             <thead>
                 <tr>
                     <th class="text-white bg-primary font-weight-bold text-center" style="width: 15%;">File Name</th>
-                     <th class="text-white bg-primary font-weight-bold text-center" style="width: 3%;">View</th>
+                     <th class="text-white bg-primary font-weight-bold text-center" style="width: 3%;color:#0072B7;">View</th>
                 </tr>
             </thead>
             <tbody id="fileList">
@@ -253,7 +253,7 @@
                 const row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${file.fileName}</td>
-                    <td style="text-align: center;"><a href="${file.fileLink}" target="_blank"><i class="fa fa-eye"></i></a></td>
+                    <td style="text-align: center;"><a href="${file.fileLink}" target="_blank" ><i class="fa fa-eye"></i></a></td>
                 `;
                 fileList.appendChild(row);
             });

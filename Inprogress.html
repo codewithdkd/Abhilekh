@@ -39,10 +39,14 @@
         }
 
         .under-construction-container img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 20px;
-        }
+        max-width: 470px; /* Ensures the image scales proportionally to the container */
+       height: auto; /* Maintains the image aspect ratio */
+       margin: 0 auto 20px auto; /* Centers the image horizontally and adds spacing below */
+       display: block; /* Makes the image a block element for proper centering */
+       border-radius: 10px; /* Optional: adds rounded corners */
+       box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2); /* Optional: adds a subtle shadow for a better visual effect */
+    }
+
 
         .under-construction-container h1 {
             font-size: 2.5rem;
@@ -73,14 +77,15 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-2 py-lg-0">
         <a href="index.html" class="navbar-brand">
-            <h1 class="text-primary">ABHILEKH</h1>
+            <h1 class="text-primary">ABHILEKH -Beta</h1>
         </a>
     </nav>
     <!-- Navbar End -->
 
     <!-- Under Construction Section -->
     <div class="under-construction-container">
-        <h1>Work in Progress</h1>
+        <img src="img/work-in-progress.png" alt="Under Construction">
+        
         <a href="index.html" class="btn btn-primary btn-back">Go Back to Home</a>
     </div>
 

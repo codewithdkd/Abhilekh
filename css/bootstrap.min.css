@@ -18,7 +18,7 @@
     --bs-white: #fff;
     --bs-gray: #6c757d;
     --bs-gray-dark: #343a40;
-    --bs-primary: #00D084;
+    --bs-primary: #0072b7;
     --bs-secondary: #17303B;
     --bs-success: #198754;
     --bs-info: #0dcaf0;
@@ -3082,7 +3082,7 @@ fieldset:disabled .btn {
 
 .btn-primary {
     color: #000;
-    background-color: #00d084;
+    background-color: #0072b7;
     border-color: #00d084
 }
 
@@ -8284,7 +8284,7 @@ fieldset:disabled .btn {
 }
 
 .text-primary {
-    color: #00d084 !important
+    color: #0072b7 !important
 }
 
 .text-secondary {
